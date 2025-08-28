@@ -14,4 +14,6 @@ func main() {
 		defer wg.Done()
 		cloud.ServeConnection()
 	}()
+
+	wg.Wait()
 }
