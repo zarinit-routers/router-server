@@ -17,6 +17,7 @@ const (
 
 	AuthorizationHeader = "Authorization"
 	RouterIDHeader      = "X-Router-ID"
+	GroupIDHeader       = "X-Group-ID"
 )
 
 var (
@@ -37,7 +38,7 @@ type Response struct {
 func ServeConnection() {
 	for {
 
-		if getCloudPassphrase() != "" {
+		if getCloudPassphrase() != "" && getCloudGroupID() != "" {
 			err := establishConnection()
 			if err != nil {
 				log.Error("Failed to establish connection", "error", err)
@@ -57,6 +58,13 @@ func getCloudPassphrase() string {
 	return "password"
 }
 
+// Currently returns "group-id"
+//
+// TODO: implement properly
+func getCloudGroupID() string {
+	return "group-id"
+}
+
 // Function return on connection error or connection closing
 func establishConnection() error {
 	u := getConnectionUrl()
@@ -66,6 +74,7 @@ func establishConnection() error {
 	headers := http.Header{}
 	headers.Add(AuthorizationHeader, getCloudPassphrase())
 	headers.Add(RouterIDHeader, GetHostID())
+	headers.Add(GroupIDHeader, getCloudGroupID())
 
 	if connection, _, err := websocket.DefaultDialer.Dial(u, headers); err != nil {
 		return err
