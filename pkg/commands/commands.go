@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/zarinit-routers/router-server/cmd/pkg/commands/handlers/timezone"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
 )
 
 type JsonMap = map[string]any

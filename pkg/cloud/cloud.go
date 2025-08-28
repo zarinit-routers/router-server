@@ -9,7 +9,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gorilla/websocket"
-	"github.com/zarinit-routers/router-server/cmd/pkg/commands"
+	"github.com/zarinit-routers/router-server/pkg/commands"
 )
 
 const (

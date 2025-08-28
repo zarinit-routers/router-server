@@ -3,7 +3,7 @@ package main
 import (
 	"sync"
 
-	"github.com/zarinit-routers/router-server/cmd/pkg/cloud"
+	"github.com/zarinit-routers/router-server/pkg/cloud"
 )
 
 func main() {
