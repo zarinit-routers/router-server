@@ -144,6 +144,10 @@ func GetHostID() string {
 
 	if err != nil {
 		log.Error("Failed get host id", "error", err, "cmd", cmd.String())
+		log.Warn("Are you sure that server runs as superuser?")
+
+		log.Warn("I currently send random UUID, remove it ASAP") // TODO: remove this
+		return "00000000-0000-0000-0000-000000000000"
 	}
 
 	return string(output)
