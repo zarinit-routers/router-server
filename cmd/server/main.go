@@ -16,6 +16,12 @@ func init() {
 	flag.Parse()
 }
 
+func init() {
+	viper.SetConfigName("router-config")
+	viper.AddConfigPath(".")
+	viper.ReadInConfig()
+}
+
 func main() {
 	wg := sync.WaitGroup{}
 

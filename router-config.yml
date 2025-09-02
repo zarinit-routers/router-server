@@ -1,0 +1,3 @@
+cloud:
+  address: localhost:8080
+  reconnect-timeout: 10s

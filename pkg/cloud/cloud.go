@@ -103,11 +103,8 @@ func establishConnection() error {
 	return nil
 }
 
-// Currently returns 10 seconds
-//
-// TODO: implement properly
 func getReconnectTimeout() time.Duration {
-	return 10 * time.Second
+	return viper.GetDuration("cloud.reconnect-timeout")
 }
 func getConnectionUrl() string {
 	u := url.URL{
@@ -118,7 +115,7 @@ func getConnectionUrl() string {
 	return u.String()
 }
 func getCloudAddress() string {
-	return "localhost:8080"
+	return viper.GetString("cloud.address")
 }
 
 func handleRequest(r *Request) error {
