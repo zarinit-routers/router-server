@@ -54,6 +54,10 @@ github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8
 github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e h1:JVG44RsyaB9T2KIHavMF/ppJZNG9ZpyihvCd0w101no=
 github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e/go.mod h1:RbqR21r5mrJuqunuUZ/Dhy/avygyECGrLceyNeo4LiM=
+github.com/zarinit-routers/commands v0.0.1 h1:y59Rq+iBLs4A2FjHptgxjLYO6tjBVp50pl3pjr3pcIA=
+github.com/zarinit-routers/commands v0.0.1/go.mod h1:khV2ZIiVRrkgjFX5ns2Q8Mw4H+xmq5QYdTr2ZWKCeyU=
+github.com/zarinit-routers/commands v0.0.2 h1:026PeoNgrTEQh2UX+vUC+BxzbN+9kHIPrWsjBkOE6fY=
+github.com/zarinit-routers/commands v0.0.2/go.mod h1:khV2ZIiVRrkgjFX5ns2Q8Mw4H+xmq5QYdTr2ZWKCeyU=
 go.uber.org/atomic v1.9.0 h1:ECmE8Bn/WFTYwEW/bpKD3M8VtR/zQVbavAoalC1PYyE=
 go.uber.org/atomic v1.9.0/go.mod h1:fEN4uk6kAWBTFdckzkM89CLk9XfWZrxpCo0nPH17wJc=
 go.uber.org/multierr v1.9.0 h1:7fIwc/ZtS0q++VgcfqFDxSBZVv/Xo49/SYnDFupUwlI=

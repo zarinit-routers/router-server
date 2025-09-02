@@ -1,6 +1,7 @@
 package commands
 
 import (
+	c "github.com/zarinit-routers/commands"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
 )
 
@@ -8,13 +9,13 @@ type JsonMap = map[string]any
 
 type CommandHandler func(JsonMap) (JsonMap, error)
 
-var commands = map[string]CommandHandler{
-	"v1/timezone/get": timezone.Get,
-	"v1/timezone/set": timezone.Set,
+var implementedCommands = map[string]CommandHandler{
+	c.CommandTimezoneGet.String(): timezone.Get,
+	c.CommandTimezoneSet.String(): timezone.Set,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
-	handler, ok := commands[command]
+	handler, ok := implementedCommands[command]
 	if !ok {
 		return nil, NotImplementedErr{Command: command}
 	}
