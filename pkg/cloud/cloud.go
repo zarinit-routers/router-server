@@ -9,6 +9,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gorilla/websocket"
+	"github.com/spf13/viper"
 	"github.com/zarinit-routers/router-server/pkg/commands"
 )
 
@@ -62,7 +63,7 @@ func getCloudPassphrase() string {
 //
 // TODO: implement properly
 func getCloudGroupID() string {
-	return "group-id"
+	return getDummyId()
 }
 
 // Function return on connection error or connection closing
@@ -138,16 +139,26 @@ func handleRequest(r *Request) error {
 	return sendResponse(response)
 }
 
+func getDummyId() string {
+	log.Warn("Using dummy UUID, do not use this in production. Even in development remove it ASAP")
+	if !viper.GetBool("dev-test") {
+		log.Fatal("Dummy id is not allowed in production")
+	}
+	return "00000000-0000-0000-0000-000000000000"
+}
+
 func GetHostID() string {
 	cmd := exec.Command("dmidecode", "--string", "system-uuid")
 	output, err := cmd.Output()
 
 	if err != nil {
 		log.Error("Failed get host id", "error", err, "cmd", cmd.String())
+		if viper.GetBool("dev-test") {
+			log.Warn("I currently send random UUID, remove it ASAP, do not use in production") // TODO: remove this
+			return getDummyId()
+		}
 		log.Warn("Are you sure that server runs as superuser?")
-
-		log.Warn("I currently send random UUID, remove it ASAP") // TODO: remove this
-		return "00000000-0000-0000-0000-000000000000"
+		log.Fatal("Failed to get host id", "error", err, "cmd", cmd.String())
 	}
 
 	return string(output)
