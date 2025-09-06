@@ -1,21 +1,28 @@
 package timezone
 
 import (
-	"errors"
+	"github.com/charmbracelet/log"
+	"github.com/zarinit-routers/router-server/pkg/utils"
 )
 
-func Get(args map[string]any) (map[string]any, error) {
-	return map[string]any{
-		"timezone": "Europe/Moscow",
-	}, nil
+func Get() (string, error) {
+	info, err := getInfo()
+	if err != nil {
+		log.Errorf("failed to get timedatectl info: %v", err)
+		return "", err
+	}
+	return info.GetTimeZone(), nil
 }
 
-func Set(args map[string]any) (map[string]any, error) {
-	newTimezone, ok := args["timezone"].(string)
-	if !ok {
-		return nil, errors.New("invalid timezone arg")
+func Set(tz string) error {
+	if err := utils.CheckRoot(); err != nil {
+		log.Warn("Operation is not allowed for non-root users")
+		return err
 	}
-	return map[string]any{
-		"timezone": newTimezone,
-	}, nil
+	_, err := utils.Execute("timedatectl", "set-timezone", tz)
+	if err != nil {
+		log.Errorf("failed to set timezone: %v", err)
+		return err
+	}
+	return nil
 }

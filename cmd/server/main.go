@@ -6,6 +6,7 @@ import (
 
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/router-server/pkg/cloud"
+	"github.com/zarinit-routers/router-server/pkg/server"
 )
 
 func init() {
@@ -25,10 +26,23 @@ func init() {
 func main() {
 	wg := sync.WaitGroup{}
 
+	// start cloud connection loop
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		cloud.ServeConnection()
+	}()
+
+	// start HTTP server
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		r := server.New()
+		addr := viper.GetString("server.address")
+		if addr == "" {
+			addr = ":8080"
+		}
+		_ = r.Run(addr)
 	}()
 
 	wg.Wait()
