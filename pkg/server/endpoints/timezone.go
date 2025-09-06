@@ -18,12 +18,13 @@ type timezoneResponse struct {
 
 func TimezoneHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tz, err := mgmt.GetTimeZone()
+		res, err := mgmt.Get(map[string]any{})
 		if err != nil {
 			log.Errorf("failed to get timezone: %v", err)
 			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
+		tz, _ := res["timezone"].(string)
 		c.JSON(http.StatusOK, timezoneResponse{Timezone: tz})
 	}
 }
@@ -35,7 +36,7 @@ func SetTimezoneHandler() gin.HandlerFunc {
 			c.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
-		if err := mgmt.SetTimeZone(req.Timezone); err != nil {
+		if _, err := mgmt.Set(map[string]any{"timezone": req.Timezone}); err != nil {
 			log.Errorf("failed to set timezone: %v", err)
 			c.AbortWithStatus(http.StatusInternalServerError)
 			return
