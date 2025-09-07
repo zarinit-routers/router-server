@@ -145,9 +145,6 @@ func handleRequest(r *Request) error {
 
 func getDummyId() string {
 	log.Warn("Using dummy UUID, do not use this in production. Even in development remove it ASAP")
-	if !viper.GetBool("dev-test") {
-		return viper.GetString("device.id")
-	}
 	return "00000000-0000-0000-0000-000000000000"
 }
 
