@@ -123,6 +123,7 @@ func getCloudAddress() string {
 }
 
 func handleRequest(r *Request) error {
+	log.Info("Handling request", "id", r.ID, "command", r.Command)
 	cmd, err := commands.CheckCommand(r.Command)
 	if err != nil {
 		sendError(r.ID, err)
@@ -130,6 +131,7 @@ func handleRequest(r *Request) error {
 	}
 	data, err := cmd(r.Args)
 	if err != nil {
+		log.Error("Failed to execute command, sending error", "err", err)
 		sendError(r.ID, err)
 		return err
 	}
@@ -137,6 +139,8 @@ func handleRequest(r *Request) error {
 		ID:   r.ID,
 		Data: data,
 	}
+
+	log.Info("Request handled", "id", r.ID, "command", r.Command, "response", response.Data)
 	return sendResponse(response)
 }
 
