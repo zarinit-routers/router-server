@@ -2,6 +2,7 @@ package cloud
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"os/exec"
@@ -15,6 +16,7 @@ import (
 
 const (
 	CloudWebSocketPath = "/api/ipc/connect"
+	CloudAuthPath      = "/api/organizations/authorize-node"
 
 	AuthorizationHeader = "Authorization"
 	RouterIDHeader      = "X-Router-ID"
@@ -52,15 +54,11 @@ func ServeConnection() {
 	}
 }
 
-// Currently returns "password"
-//
 // TODO: implement properly
 func getCloudPassphrase() string {
 	return "password"
 }
 
-// Currently returns "group-id"
-//
 // TODO: implement properly
 func getCloudGroupID() string {
 	return getDummyId()
@@ -72,10 +70,13 @@ func establishConnection() error {
 
 	log.Info("Trying to establish connection", "portalUrl", u)
 
+	token, err := Authenticate()
+	if err != nil {
+		return fmt.Errorf("failed authenticate in cloud: %s", err)
+	}
+
 	headers := http.Header{}
-	headers.Add(AuthorizationHeader, getCloudPassphrase())
-	headers.Add(RouterIDHeader, GetHostID())
-	headers.Add(GroupIDHeader, getCloudGroupID())
+	headers.Add(AuthorizationHeader, token)
 
 	if connection, _, err := websocket.DefaultDialer.Dial(u, headers); err != nil {
 		return err
@@ -109,10 +110,13 @@ func getReconnectTimeout() time.Duration {
 func getConnectionUrl() string {
 	u := url.URL{
 		Scheme: "ws",
-		Host:   getCloudAddress(),
+		Host:   getCloudWsAddress(),
 		Path:   CloudWebSocketPath,
 	}
 	return u.String()
+}
+func getCloudWsAddress() string {
+	return fmt.Sprintf("%s:%d", viper.GetString("cloud.address"), viper.GetInt("cloud.ws-port"))
 }
 func getCloudAddress() string {
 	return viper.GetString("cloud.address")

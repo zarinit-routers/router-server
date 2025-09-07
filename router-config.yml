@@ -1,6 +1,7 @@
 dev-test: true
 cloud:
-  address: localhost:8080
+  address: localhost
+  ws-port: 8071
   reconnect-timeout: 10s
 client:
   addresses:

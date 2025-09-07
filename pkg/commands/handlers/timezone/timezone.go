@@ -19,7 +19,7 @@ func Get(_ map[string]any) (map[string]any, error) {
 func Set(params map[string]any) (map[string]any, error) {
 	if err := utils.CheckRoot(); err != nil {
 		log.Warn("Operation is not allowed for non-root users")
-		return nil, err
+		return nil, fmt.Errorf("this operation is not allowed for non-root user: %s", err)
 	}
 
 	tz, _ := params["timezone"].(string)
@@ -30,7 +30,7 @@ func Set(params map[string]any) (map[string]any, error) {
 	_, err := utils.Execute("timedatectl", "set-timezone", tz)
 	if err != nil {
 		log.Errorf("failed to set timezone: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed set timezone: %s", err)
 	}
 	return map[string]any{"timezone": tz}, nil
 }
