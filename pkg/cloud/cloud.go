@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"os/exec"
 	"time"
 
 	"github.com/charmbracelet/log"
@@ -147,26 +146,18 @@ func handleRequest(r *Request) error {
 func getDummyId() string {
 	log.Warn("Using dummy UUID, do not use this in production. Even in development remove it ASAP")
 	if !viper.GetBool("dev-test") {
-		log.Fatal("Dummy id is not allowed in production")
+		return viper.GetString("device.id")
 	}
 	return "00000000-0000-0000-0000-000000000000"
 }
 
 func GetHostID() string {
-	cmd := exec.Command("dmidecode", "--string", "system-uuid")
-	output, err := cmd.Output()
-
-	if err != nil {
-		log.Error("Failed get host id", "error", err, "cmd", cmd.String())
-		if viper.GetBool("dev-test") {
-			log.Warn("I currently send random UUID, remove it ASAP, do not use in production") // TODO: remove this
-			return getDummyId()
-		}
-		log.Warn("Are you sure that server runs as superuser?")
-		log.Fatal("Failed to get host id", "error", err, "cmd", cmd.String())
+	if viper.GetBool("dev-test") {
+		log.Warn("I currently send random UUID, remove it ASAP, do not use in production") // TODO: remove this
+		return getDummyId()
+	} else {
+		return viper.GetString("device.id")
 	}
-
-	return string(output)
 }
 
 func sendResponse(response Response) error {

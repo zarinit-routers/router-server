@@ -1,4 +1,3 @@
-dev-test: true
 cloud:
   address: localhost
   ws-port: 8071
@@ -8,3 +7,6 @@ client:
     - http://localhost:3000
 server:
   address: :8090
+
+device:
+  id: c16136f0-8bc4-11f0-b752-cf2e8f51eac5

@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/charmbracelet/log"
 )
 
 type Token = string
@@ -31,6 +33,7 @@ type AuthResponse struct {
 }
 
 func Authenticate() (Token, error) {
+	log.Info("Authenticating", "nodeId", GetHostID())
 
 	request := AuthRequest{
 		NodeId:         GetHostID(),
