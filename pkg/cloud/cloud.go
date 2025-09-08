@@ -138,12 +138,7 @@ func getDummyId() string {
 }
 
 func GetHostID() string {
-	if viper.GetBool("dev-test") {
-		log.Warn("I currently send random UUID, remove it ASAP, do not use in production") // TODO: remove this
-		return getDummyId()
-	} else {
-		return viper.GetString("device.id")
-	}
+	return viper.GetString("device.id")
 }
 
 func sendResponse(response Response) error {
