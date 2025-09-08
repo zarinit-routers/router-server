@@ -25,10 +25,9 @@ func New() *gin.Engine {
 
 	api := r.Group("/api")
 	{
-		api.GET("/timezone", endpoints.TimezoneHandler())
-		api.POST("/timezone/set", endpoints.SetTimezoneHandler())
+		api.POST("/cmd", endpoints.CommandHandler())
 	}
 
-	log.Info("HTTP server initialized", "allow_origins", cfg.AllowOrigins)
+	log.Info("HTTP server initialized", "AllowOrigins", cfg.AllowOrigins)
 	return r
 }
