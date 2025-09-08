@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/charmbracelet/log"
@@ -39,40 +38,37 @@ type Response struct {
 
 func ServeConnection() {
 	for {
-
-		if getCloudPassphrase() != "" && getCloudGroupID() != "" {
-			err := establishConnection()
-			if err != nil {
-				log.Error("Failed to establish connection", "error", err)
-			}
+		if err := tryConnect(); err != nil {
+			log.Error("Failed to connect to cloud", "error", err)
 		}
-
 		timeout := getReconnectTimeout()
 		log.Debug("Reconnect timeout", "timeout", timeout)
 		time.Sleep(timeout)
 	}
 }
 
-// TODO: implement properly
-func getCloudPassphrase() string {
-	return "password"
-}
-
-// TODO: implement properly
-func getCloudGroupID() string {
-	return getDummyId()
+func tryConnect() error {
+	cloud, err := getCloudConfig()
+	if err != nil {
+		return nil
+	}
+	if err := establishConnection(cloud); err != nil {
+		log.Error("Failed establish connection with cloud", "error", err)
+		return err
+	}
+	return establishConnection(cloud)
 }
 
 // Function return on connection error or connection closing
-func establishConnection() error {
-	u := getConnectionUrl()
+func establishConnection(cloud *ConnectionConfig) error {
+	token, err := cloud.Authenticate()
+	if err != nil {
+		return fmt.Errorf("failed authenticate on cloud: %s", err)
+	}
+
+	u := cloud.GetWebsocketURL()
 
 	log.Info("Trying to establish connection", "portalUrl", u)
-
-	token, err := Authenticate()
-	if err != nil {
-		return fmt.Errorf("failed authenticate in cloud: %s", err)
-	}
 
 	headers := http.Header{}
 	headers.Add(AuthorizationHeader, token)
@@ -104,21 +100,7 @@ func establishConnection() error {
 }
 
 func getReconnectTimeout() time.Duration {
-	return viper.GetDuration("cloud.reconnect-timeout")
-}
-func getConnectionUrl() string {
-	u := url.URL{
-		Scheme: "ws",
-		Host:   getCloudWsAddress(),
-		Path:   CloudWebSocketPath,
-	}
-	return u.String()
-}
-func getCloudWsAddress() string {
-	return fmt.Sprintf("%s:%d", viper.GetString("cloud.address"), viper.GetInt("cloud.ws-port"))
-}
-func getCloudAddress() string {
-	return viper.GetString("cloud.address")
+	return config.GetDuration("reconnect-timeout")
 }
 
 func handleRequest(r *Request) error {

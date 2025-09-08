@@ -6,21 +6,11 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/charmbracelet/log"
 )
 
 type Token = string
-
-func getAuthUrl() string {
-	u := url.URL{
-		Scheme: "http",
-		Host:   getCloudAddress(),
-		Path:   CloudAuthPath,
-	}
-	return u.String()
-}
 
 type AuthRequest struct {
 	NodeId         string `json:"id"`
@@ -32,13 +22,13 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-func Authenticate() (Token, error) {
+func (c *ConnectionConfig) Authenticate() (Token, error) {
 	log.Info("Authenticating", "nodeId", GetHostID())
 
 	request := AuthRequest{
 		NodeId:         GetHostID(),
-		OrganizationId: getCloudGroupID(),
-		Passphrase:     getCloudPassphrase(),
+		OrganizationId: c.OrganizationId,
+		Passphrase:     c.Passphrase,
 	}
 
 	requestBody, err := json.Marshal(request)
@@ -47,9 +37,9 @@ func Authenticate() (Token, error) {
 	}
 	bodyBuffer := bytes.NewBuffer(requestBody)
 
-	response, err := http.Post(getAuthUrl(), "application/json", bodyBuffer)
+	response, err := http.Post(c.GetAuthURL(), "application/json", bodyBuffer)
 	if err != nil {
-		return "", fmt.Errorf("failed send request to %q: %s", getAuthUrl(), err)
+		return "", fmt.Errorf("failed send request to %q: %s", c.GetAuthURL(), err)
 	}
 
 	body, err := io.ReadAll(response.Body)
