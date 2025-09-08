@@ -21,6 +21,17 @@ var (
 	conn *websocket.Conn
 )
 
+type Status struct {
+	Connected bool `json:"connected"`
+}
+
+func GetStatus() Status {
+	st := Status{
+		Connected: conn != nil,
+	}
+	return st
+}
+
 type Request struct {
 	Command string         `json:"command"`
 	Args    map[string]any `json:"args"`

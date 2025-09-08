@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/gin-gonic/gin"
+	"github.com/zarinit-routers/router-server/pkg/cloud"
 	config "github.com/zarinit-routers/router-server/pkg/cloud/config"
 )
 
@@ -46,8 +47,9 @@ func UpdateConfigHandler() gin.HandlerFunc {
 }
 func GetCloudStatusHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		status := cloud.GetStatus()
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"status": status,
 		})
 	}
 }
