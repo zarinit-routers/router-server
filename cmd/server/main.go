@@ -4,6 +4,7 @@ import (
 	"flag"
 	"sync"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/router-server/pkg/cloud"
 	"github.com/zarinit-routers/router-server/pkg/server"
@@ -11,6 +12,7 @@ import (
 
 func init() {
 	flag.BoolFunc("dev-test", "", func(s string) error {
+		log.Info("Development/Testing mode enabled")
 		viper.Set("dev-test", true)
 		return nil
 	})
@@ -21,6 +23,11 @@ func init() {
 	viper.SetConfigName("router-config")
 	viper.AddConfigPath(".")
 	viper.ReadInConfig()
+	viper.AutomaticEnv()
+
+	if viper.GetBool("debug") {
+		log.SetLevel(log.DebugLevel)
+	}
 }
 
 func main() {

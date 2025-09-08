@@ -38,25 +38,24 @@ type Response struct {
 
 func ServeConnection() {
 	for {
-		if err := tryConnect(); err != nil {
-			log.Error("Failed to connect to cloud", "error", err)
-		}
+		tryConnect()
+
 		timeout := getReconnectTimeout()
 		log.Debug("Reconnect timeout", "timeout", timeout)
 		time.Sleep(timeout)
 	}
 }
 
-func tryConnect() error {
+func tryConnect() {
 	cloud, err := getCloudConfig()
 	if err != nil {
-		return nil
+		log.Debug("Failed to get cloud config", "err", err) // Error from getting connection config is not a real problem
+		return
 	}
 	if err := establishConnection(cloud); err != nil {
-		log.Error("Failed establish connection with cloud", "error", err)
-		return err
+		log.Error("Failed establish connection with cloud", "error", err, "config", cloud)
+		return
 	}
-	return establishConnection(cloud)
 }
 
 // Function return on connection error or connection closing
