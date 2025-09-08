@@ -23,9 +23,21 @@ func New() *gin.Engine {
 	}
 	r.Use(cors.New(cfg))
 
+	authMiddleware := func(c *gin.Context) {
+		log.Warn("Auth middleware not implemented")
+		c.Next()
+	}
+
 	api := r.Group("/api")
 	{
-		api.POST("/cmd", endpoints.CommandHandler())
+		api.POST("/cmd", authMiddleware, endpoints.CommandHandler())
+	}
+	cloud := api.Group("/cloud")
+	{
+		cloud.Use(authMiddleware)
+		cloud.GET("/config", endpoints.GetConfigHandler())
+		cloud.POST("/config", endpoints.UpdateConfigHandler())
+		cloud.GET("/status", endpoints.GetCloudStatusHandler())
 	}
 
 	log.Info("HTTP server initialized", "AllowOrigins", cfg.AllowOrigins)

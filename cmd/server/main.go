@@ -45,11 +45,11 @@ func main() {
 	go func() {
 		defer wg.Done()
 		r := server.New()
+		viper.SetDefault("server.address", ":8080")
 		addr := viper.GetString("server.address")
-		if addr == "" {
-			addr = ":8080"
+		if err := r.Run(addr); err != nil {
+			log.Fatal("Failed to start HTTP server", "error", err)
 		}
-		_ = r.Run(addr)
 	}()
 
 	wg.Wait()

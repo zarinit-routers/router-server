@@ -1,5 +1,5 @@
-passphrase: ''
-organization-id: ''
 cloud-host: localhost
-websocket-port: 8071
+organization-id: ""
+passphrase: cool-password
 reconnect-timeout: 10s
+websocket-port: 8071

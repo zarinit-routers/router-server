@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/charmbracelet/log"
+	config "github.com/zarinit-routers/router-server/pkg/cloud/config"
 )
 
 type Token = string
@@ -22,7 +23,7 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-func (c *ConnectionConfig) Authenticate() (Token, error) {
+func authenticate(c config.ConnectionConfig) (Token, error) {
 	log.Info("Authenticating", "nodeId", GetHostID())
 
 	request := AuthRequest{

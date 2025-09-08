@@ -9,16 +9,12 @@ import (
 	"github.com/charmbracelet/log"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/viper"
+	config "github.com/zarinit-routers/router-server/pkg/cloud/config"
 	"github.com/zarinit-routers/router-server/pkg/commands"
 )
 
 const (
-	CloudWebSocketPath = "/api/ipc/connect"
-	CloudAuthPath      = "/api/organizations/authorize-node"
-
 	AuthorizationHeader = "Authorization"
-	RouterIDHeader      = "X-Router-ID"
-	GroupIDHeader       = "X-Group-ID"
 )
 
 var (
@@ -47,7 +43,8 @@ func ServeConnection() {
 }
 
 func tryConnect() {
-	cloud, err := getCloudConfig()
+	cloud := config.GetConnectionConfig()
+	err := cloud.Validate()
 	if err != nil {
 		log.Debug("Failed to get cloud config", "err", err) // Error from getting connection config is not a real problem
 		return
@@ -59,13 +56,13 @@ func tryConnect() {
 }
 
 // Function return on connection error or connection closing
-func establishConnection(cloud *ConnectionConfig) error {
-	token, err := cloud.Authenticate()
+func establishConnection(conf *config.ConnectionConfig) error {
+	token, err := authenticate(*conf)
 	if err != nil {
 		return fmt.Errorf("failed authenticate on cloud: %s", err)
 	}
 
-	u := cloud.GetWebsocketURL()
+	u := conf.GetWebsocketURL()
 
 	log.Info("Trying to establish connection", "portalUrl", u)
 
@@ -99,7 +96,7 @@ func establishConnection(cloud *ConnectionConfig) error {
 }
 
 func getReconnectTimeout() time.Duration {
-	return config.GetDuration("reconnect-timeout")
+	return config.GetReconnectTimeout()
 }
 
 func handleRequest(r *Request) error {

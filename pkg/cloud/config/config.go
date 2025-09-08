@@ -34,6 +34,11 @@ func init() {
 	}
 }
 
+const (
+	CloudWebSocketPath = "/api/ipc/connect"
+	CloudAuthPath      = "/api/organizations/authorize-node"
+)
+
 type ConnectionConfig struct {
 	Passphrase     string
 	OrganizationId string
@@ -58,36 +63,65 @@ func (c *ConnectionConfig) GetAuthURL() string {
 	return u.String()
 }
 
-func (c *ConnectionConfig) validate() error {
+type ValidationError struct {
+	err error
+}
+
+func (e *ValidationError) Error() string {
+	return fmt.Sprintf("validation failed: %s", e.err.Error())
+}
+
+func NewValidationError(err error) error {
+	return &ValidationError{err: err}
+}
+
+func (c *ConnectionConfig) Validate() error {
 	if c.Passphrase == "" {
-		return fmt.Errorf("passphrase is empty")
+		return NewValidationError(fmt.Errorf("passphrase is empty"))
 	}
 	if c.OrganizationId == "" {
-		return fmt.Errorf("organization id is empty")
+		return NewValidationError(fmt.Errorf("organization id is empty"))
 	}
 	if c.CloudHost == "" {
-		return fmt.Errorf("cloud host is not set")
+		return NewValidationError(fmt.Errorf("cloud host is not set"))
 	}
 	if c.WSPort == 0 {
-		return fmt.Errorf("websocket port is not set")
+		return NewValidationError(fmt.Errorf("websocket port is not set"))
 	}
 	if c.WSPort < 0 {
-		return fmt.Errorf("invalid websocket port %d", c.WSPort)
+		return NewValidationError(fmt.Errorf("invalid websocket port %d", c.WSPort))
 	}
 	return nil
 }
 
-func getCloudConfig() (*ConnectionConfig, error) {
+func (c *ConnectionConfig) SetPassphrase(in string) {
+	c.Passphrase = in
+	config.Set("passphrase", in)
+	c.save()
+}
+func (c *ConnectionConfig) SetOrganizationId(in string) {
+	c.Passphrase = in
+	config.Set("organization-id", in)
+	c.save()
+}
+
+func (c *ConnectionConfig) save() {
+	if err := config.WriteConfig(); err != nil {
+		log.Error("Error while writing cloud config", "err", err, "config", c)
+	}
+}
+
+func GetConnectionConfig() *ConnectionConfig {
 	c := ConnectionConfig{
 		Passphrase:     config.GetString("passphrase"),
 		OrganizationId: config.GetString("organization-id"),
 		CloudHost:      config.GetString("cloud-host"),
 		WSPort:         config.GetInt("websocket-port"),
 	}
-	if err := c.validate(); err != nil {
-		return nil, err
-	}
-	log.Info("Cloud config", "config", c)
 
-	return &c, nil
+	return &c
+}
+
+func GetReconnectTimeout() time.Duration {
+	return config.GetDuration("reconnect-timeout")
 }
