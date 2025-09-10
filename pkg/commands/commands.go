@@ -2,16 +2,17 @@ package commands
 
 import (
 	c "github.com/zarinit-routers/commands"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/system"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
+	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-type JsonMap = map[string]any
-
-type CommandHandler func(JsonMap) (JsonMap, error)
+type CommandHandler func(models.JsonMap) (any, error)
 
 var implementedCommands = map[string]CommandHandler{
 	c.CommandTimezoneGet.String(): timezone.Get,
 	c.CommandTimezoneSet.String(): timezone.Set,
+	"v1/system/get-os-info":       system.GetOSInfo,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {

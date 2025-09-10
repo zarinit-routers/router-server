@@ -38,9 +38,9 @@ type Request struct {
 	ID      string         `json:"requestId"`
 }
 type Response struct {
-	Data  map[string]any `json:"data"`
-	ID    string         `json:"requestId"`
-	Error string         `json:"error"`
+	Data  any    `json:"data"`
+	ID    string `json:"requestId"`
+	Error string `json:"error"`
 }
 
 func ServeConnection() {

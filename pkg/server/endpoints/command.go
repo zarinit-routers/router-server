@@ -14,9 +14,9 @@ type CommandRequest struct {
 }
 
 type CommandResponse struct {
-	Data         map[string]any `json:"data"`
-	CommandError string         `json:"commandError"`
-	RequestError string         `json:"requestError"`
+	Data         any    `json:"data"`
+	CommandError string `json:"commandError"`
+	RequestError string `json:"requestError"`
 }
 
 func requestError(err error) CommandResponse {

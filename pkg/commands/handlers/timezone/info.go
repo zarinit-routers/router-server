@@ -4,20 +4,20 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"os/exec"
 	"strings"
+
+	"github.com/zarinit-routers/cli"
 )
 
 type TimedateInfoDictionary map[string]string
 
 func getInfo() (TimedateInfoDictionary, error) {
-	cmd := exec.Command("timedatectl", "show")
-	out, err := cmd.Output()
+	output, err := cli.Execute("timedatectl", "show")
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute timedatectl show: %w", err)
 	}
 	info := TimedateInfoDictionary{}
-	scanner := bufio.NewScanner(bytes.NewReader(out))
+	scanner := bufio.NewScanner(bytes.NewReader(output))
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.TrimSpace(line) == "" {
