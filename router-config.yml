@@ -10,3 +10,7 @@ server:
 
 device:
   id: 535a674a-e515-45be-badb-b901ccb3b4ab
+  manufacturer: Zarinit
+  model: Router
+  model-version: dev
+  firmware-version: 0.1.0

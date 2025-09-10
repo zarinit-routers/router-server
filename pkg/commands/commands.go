@@ -13,6 +13,7 @@ var implementedCommands = map[string]CommandHandler{
 	c.CommandTimezoneGet.String(): timezone.Get,
 	c.CommandTimezoneSet.String(): timezone.Set,
 	"v1/system/get-os-info":       system.GetOSInfo,
+	"v1/system/get-device-info":   system.GetDeviceInfo,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
