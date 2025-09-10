@@ -17,6 +17,7 @@ var implementedCommands = map[string]CommandHandler{
 	// system
 	"v1/system/get-os-info":     system.GetOSInfo,
 	"v1/system/get-device-info": system.GetDeviceInfo,
+	"v1/system/reboot":          system.Reboot,
 	// ssh
 	"v1/ssh/enable":     ssh.Enable,
 	"v1/ssh/disable":    ssh.Disable,
