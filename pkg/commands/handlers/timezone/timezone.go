@@ -15,7 +15,7 @@ func Get(_ map[string]any) (any, error) {
 		log.Errorf("failed to get timedatectl info: %v", err)
 		return nil, err
 	}
-	return models.JsonMap{"timezone": info.GetTimeZone()}, nil
+	return models.JSONMap{"timezone": info.GetTimeZone()}, nil
 }
 
 func Set(params map[string]any) (any, error) {
@@ -34,5 +34,5 @@ func Set(params map[string]any) (any, error) {
 		log.Errorf("failed to set timezone: %v", err)
 		return nil, fmt.Errorf("failed set timezone: %s", err)
 	}
-	return models.JsonMap{"timezone": tz}, nil
+	return models.JSONMap{"timezone": tz}, nil
 }

@@ -1,3 +1,3 @@
 package models
 
-type JsonMap = map[string]any
+type JSONMap = map[string]any

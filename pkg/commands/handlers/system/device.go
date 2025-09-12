@@ -5,8 +5,8 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-func GetDeviceInfo(_ models.JsonMap) (any, error) {
-	return models.JsonMap{
+func GetDeviceInfo(_ models.JSONMap) (any, error) {
+	return models.JSONMap{
 		"manufacturer":    viper.GetString("device.manufacturer"),
 		"model":           viper.GetString("device.model"),
 		"modelVersion":    viper.GetString("device.model-version"),

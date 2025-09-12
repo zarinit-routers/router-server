@@ -12,7 +12,7 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-func GetOSInfo(_ models.JsonMap) (any, error) {
+func GetOSInfo(_ models.JSONMap) (any, error) {
 
 	info, err := newInfo()
 	if err != nil {

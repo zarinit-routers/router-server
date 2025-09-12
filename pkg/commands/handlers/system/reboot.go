@@ -8,7 +8,7 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-func Reboot(_ models.JsonMap) (any, error) {
+func Reboot(_ models.JSONMap) (any, error) {
 	go func() {
 		time.Sleep(5 * time.Second)
 		err := cli.ExecuteErr("reboot")
@@ -17,7 +17,7 @@ func Reboot(_ models.JsonMap) (any, error) {
 		}
 	}()
 
-	return models.JsonMap{
+	return models.JSONMap{
 		"message": "Rebooting...",
 	}, nil
 

@@ -2,13 +2,14 @@ package commands
 
 import (
 	c "github.com/zarinit-routers/commands"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/modems"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/ssh"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/system"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-type CommandHandler func(models.JsonMap) (any, error)
+type CommandHandler func(models.JSONMap) (any, error)
 
 var implementedCommands = map[string]CommandHandler{
 	// timezone
@@ -22,6 +23,10 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/ssh/enable":     ssh.Enable,
 	"v1/ssh/disable":    ssh.Disable,
 	"v1/ssh/get-status": ssh.GetStatus,
+	// modems
+	"v1/modems/list":    modems.ListModems,
+	"v1/modems/enable":  modems.EnableModem,
+	"v1/modems/disable": modems.DisableModem,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
