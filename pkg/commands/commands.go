@@ -3,6 +3,7 @@ package commands
 import (
 	c "github.com/zarinit-routers/commands"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/modems"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/sim"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/ssh"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/system"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
@@ -28,6 +29,8 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/modems/enable":     modems.Enable,
 	"v1/modems/disable":    modems.Disable,
 	"v1/modems/get-signal": modems.GetSignal,
+	// sim
+	"v1/sim/get": sim.Get,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
