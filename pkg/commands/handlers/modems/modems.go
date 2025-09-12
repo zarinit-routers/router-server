@@ -7,7 +7,7 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
-func ListModems(_ models.JSONMap) (any, error) {
+func List(_ models.JSONMap) (any, error) {
 	modems, err := mmcli.List()
 	if err != nil {
 		return nil, err
@@ -17,7 +17,7 @@ func ListModems(_ models.JSONMap) (any, error) {
 
 var ErrInvalidModemArg = fmt.Errorf("field 'modem' is required and must be a string value")
 
-func EnableModem(args models.JSONMap) (any, error) {
+func Enable(args models.JSONMap) (any, error) {
 	name, ok := args["modem"].(string)
 	if !ok {
 		return nil, ErrInvalidModemArg
@@ -33,7 +33,7 @@ func EnableModem(args models.JSONMap) (any, error) {
 	return models.JSONMap{"modem": name}, nil
 }
 
-func DisableModem(args models.JSONMap) (any, error) {
+func Disable(args models.JSONMap) (any, error) {
 	name, ok := args["modem"].(string)
 	if !ok {
 		return nil, ErrInvalidModemArg
@@ -47,4 +47,20 @@ func DisableModem(args models.JSONMap) (any, error) {
 		return nil, fmt.Errorf("failed disable modem %q: %s", name, err)
 	}
 	return models.JSONMap{"modem": name}, nil
+}
+
+func GetSignal(args models.JSONMap) (any, error) {
+	name, ok := args["modem"].(string)
+	if !ok {
+		return nil, ErrInvalidModemArg
+	}
+	modem, err := mmcli.Get(name)
+	if err != nil {
+		return nil, fmt.Errorf("failed get modem %q: %s", name, err)
+	}
+	signal, err := modem.GetSignal()
+	if err != nil {
+		return nil, fmt.Errorf("failed get signal for modem %q: %s", name, err)
+	}
+	return models.JSONMap{"signal": signal}, nil
 }

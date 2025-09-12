@@ -24,9 +24,10 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/ssh/disable":    ssh.Disable,
 	"v1/ssh/get-status": ssh.GetStatus,
 	// modems
-	"v1/modems/list":    modems.ListModems,
-	"v1/modems/enable":  modems.EnableModem,
-	"v1/modems/disable": modems.DisableModem,
+	"v1/modems/list":       modems.List,
+	"v1/modems/enable":     modems.Enable,
+	"v1/modems/disable":    modems.Disable,
+	"v1/modems/get-signal": modems.GetSignal,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
