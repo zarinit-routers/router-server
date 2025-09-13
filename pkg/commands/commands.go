@@ -36,9 +36,9 @@ var implementedCommands = map[string]CommandHandler{
 	// journals
 	"v1/journals/get": journals.Get,
 	// diagnostics
-	"v1/diagnostics/nslookup":   diagnostics.Nslookup,
-	"v1/diagnostics/traceroute": diagnostics.Traceroute,
-	"v1/diagnostics/ping":       diagnostics.Ping,
+	"v1/diagnostics/run-nslookup":   diagnostics.Nslookup,
+	"v1/diagnostics/run-traceroute": diagnostics.Traceroute,
+	"v1/diagnostics/run-ping":       diagnostics.Ping,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
