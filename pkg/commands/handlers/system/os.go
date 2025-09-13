@@ -9,6 +9,7 @@ import (
 	"github.com/mackerelio/go-osstat/network"
 	"github.com/zarinit-routers/cli/df"
 	"github.com/zarinit-routers/cli/nmcli"
+	"github.com/zarinit-routers/router-server/pkg/cli/ip"
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
@@ -25,6 +26,7 @@ func GetOSInfo(_ models.JSONMap) (any, error) {
 type NetworkStats struct {
 	network.Stats
 	MAC string `json:"MAC"`
+	IP  string `json:"IP"`
 }
 
 type OSInfo struct {
@@ -66,8 +68,10 @@ func toNetworkStatsArr(stats []network.Stats) []NetworkStats {
 
 func newNetworkStats(s network.Stats) NetworkStats {
 	mac, _ := nmcli.GetHardwareAddress(s.Name)
+	ipAddr, _ := ip.GetIP(s.Name)
 	return NetworkStats{
 		Stats: s,
 		MAC:   mac,
+		IP:    ipAddr,
 	}
 }
