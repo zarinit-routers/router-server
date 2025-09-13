@@ -1,4 +1,4 @@
-cloud-host: dev.serv
+cloud-host: localhost
 organization-id: "00000000-0000-0000-0000-000000000000"
 passphrase: cool-password
 reconnect-timeout: 10s
