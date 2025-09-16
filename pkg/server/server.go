@@ -1,13 +1,10 @@
 package server
 
 import (
-	"net/http"
-
 	"github.com/charmbracelet/log"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"github.com/zarinit-routers/router-server/pkg/server/endpoints"
+	"github.com/zarinit-routers/router-server/pkg/server/middleware"
 )
 
 func New() *gin.Engine {
@@ -15,31 +12,28 @@ func New() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
 
-	cfg := cors.Config{
-		AllowOrigins:     viper.GetStringSlice("client.addresses"),
-		AllowMethods:     []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		AllowCredentials: true,
-	}
-	r.Use(cors.New(cfg))
+	r.Use(middleware.Cors())
 
-	authMiddleware := func(c *gin.Context) {
-		log.Warn("Auth middleware not implemented")
-		c.Next()
-	}
+	authMiddleware := middleware.Auth()
 
-	api := r.Group("/api")
 	{
+		api := r.Group("/api")
 		api.POST("/cmd", authMiddleware, endpoints.CommandHandler())
-	}
-	cloud := api.Group("/cloud")
-	{
-		cloud.Use(authMiddleware)
-		cloud.GET("/config", endpoints.GetConfigHandler())
-		cloud.POST("/config", endpoints.UpdateConfigHandler())
-		cloud.GET("/status", endpoints.GetCloudStatusHandler())
+
+		cloud := api.Group("/cloud")
+		{
+			cloud.Use(authMiddleware)
+			cloud.GET("/config", endpoints.GetConfigHandler())
+			cloud.POST("/config", endpoints.UpdateConfigHandler())
+			cloud.GET("/status", endpoints.GetCloudStatusHandler())
+		}
+
+		auth := api.Group("/auth")
+		{
+			auth.POST("/login", endpoints.LoginHandler())
+		}
 	}
 
-	log.Info("HTTP server initialized", "AllowOrigins", cfg.AllowOrigins)
+	log.Info("HTTP server initialized")
 	return r
 }
