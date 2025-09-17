@@ -29,8 +29,6 @@ func mustConnect() *badger.DB {
 }
 func connect() (*badger.DB, error) {
 	path := getDBPath()
-	dbMutex.Lock()
-	defer dbMutex.Unlock()
 	db, err := badger.Open(badger.DefaultOptions(path))
 	if err != nil {
 		return nil, fmt.Errorf("failed open connection to storage file %q: %s", path, err)
@@ -41,8 +39,12 @@ func connect() (*badger.DB, error) {
 // Tries to connect to the key-value store and returns an error if it fails.
 // Use this function to check if the key-value store is available at the start of a program.
 func Check() error {
-	_, err := connect()
-	return err
+	db, err := connect()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	return nil
 }
 func GetString(key string) string {
 	return getString(key)

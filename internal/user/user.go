@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 
+	"github.com/charmbracelet/log"
 	"github.com/zarinit-routers/router-server/pkg/storage"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -10,8 +11,10 @@ import (
 const DefaultPassword = "root"
 
 func EnsureCreated() error {
+	log.Info("Checking default user")
 	if storage.GetString("user.password") == "" {
-		SetPassword(DefaultPassword)
+		log.Warn("Default user not found, creating")
+		return SetPassword(DefaultPassword)
 	}
 	return nil
 }

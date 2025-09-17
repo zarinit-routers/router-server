@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
+	"github.com/zarinit-routers/router-server/internal/user"
 	"github.com/zarinit-routers/router-server/pkg/cloud"
 	"github.com/zarinit-routers/router-server/pkg/server"
 	"github.com/zarinit-routers/router-server/pkg/storage"
@@ -35,6 +36,10 @@ func main() {
 
 	if err := storage.Check(); err != nil {
 		log.Fatal("Key-value storage is not available, check failed", "error", err)
+	}
+
+	if err := user.EnsureCreated(); err != nil {
+		log.Fatal("Error while checking default user", "error", err)
 	}
 
 	wg := sync.WaitGroup{}
