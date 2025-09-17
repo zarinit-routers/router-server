@@ -1,12 +1,9 @@
-cloud:
-  address: localhost
-  ws-port: 8071
-  reconnect-timeout: 10s
 client:
   addresses:
     - http://localhost:3000
+
 server:
-  address: :8090
+  address: :11211
 
 device:
   id: 535a674a-e515-45be-badb-b901ccb3b4ab
@@ -14,3 +11,10 @@ device:
   model: Router
   model-version: dev
   firmware-version: 0.1.0
+
+storage:
+  key-value:
+    path: /tmp/zarinit-routers-router-key-value-storage
+
+auth:
+  security-key: "12345678901234567890123456789012"

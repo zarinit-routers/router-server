@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/router-server/pkg/cloud"
 	"github.com/zarinit-routers/router-server/pkg/server"
+	"github.com/zarinit-routers/router-server/pkg/storage"
 )
 
 func init() {
@@ -31,6 +32,11 @@ func init() {
 }
 
 func main() {
+
+	if err := storage.Check(); err != nil {
+		log.Fatal("Key-value storage is not available, check failed", "error", err)
+	}
+
 	wg := sync.WaitGroup{}
 
 	// start cloud connection loop
