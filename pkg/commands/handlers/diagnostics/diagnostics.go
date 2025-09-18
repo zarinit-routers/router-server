@@ -23,7 +23,7 @@ func Ping(args models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to run ping: %s", err)
 	}
-	return output, nil
+	return models.JSONMap{"output": output}, nil
 }
 
 func Traceroute(args models.JSONMap) (any, error) {
@@ -36,7 +36,7 @@ func Traceroute(args models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to run traceroute: %s", err)
 	}
-	return output, nil
+	return models.JSONMap{"output": output}, nil
 }
 
 func Nslookup(args models.JSONMap) (any, error) {
@@ -49,5 +49,5 @@ func Nslookup(args models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to run nslookup: %s", err)
 	}
-	return output, nil
+	return models.JSONMap{"output": output}, nil
 }
