@@ -6,7 +6,7 @@ server:
   address: :11211
 
 device:
-  id: 535a674a-e515-45be-badb-b901ccb3b4ab
+  id: 76c4db34-ad38-4b4c-8234-0aa3810ae1c7
   manufacturer: Zarinit
   model: Router
   model-version: dev

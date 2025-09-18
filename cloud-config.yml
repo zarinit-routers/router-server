@@ -1,4 +1,4 @@
-cloud-host: localhost
+cloud-host: 79.174.70.81
 organization-id: "00000000-0000-0000-0000-000000000000"
 passphrase: cool-password
 reconnect-timeout: 10s

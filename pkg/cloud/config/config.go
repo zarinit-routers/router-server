@@ -17,7 +17,7 @@ func init() {
 	config = viper.New()
 	config.SetConfigName("cloud-config")
 	config.AddConfigPath(".")
-	config.AddConfigPath("/etc/")
+	config.AddConfigPath("/etc/zarinit/")
 
 	// Defaults
 	config.SetDefault("reconnect-timeout", time.Second*10)

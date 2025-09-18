@@ -24,6 +24,7 @@ func init() {
 func init() {
 	viper.SetConfigName("router-config")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("/etc/zarinit/")
 	viper.ReadInConfig()
 	viper.AutomaticEnv()
 
@@ -58,6 +59,7 @@ func main() {
 		r := server.New()
 		viper.SetDefault("server.address", ":8080")
 		addr := viper.GetString("server.address")
+		log.Info("Starting HTTP server", "address", addr)
 		if err := r.Run(addr); err != nil {
 			log.Fatal("Failed to start HTTP server", "error", err)
 		}
