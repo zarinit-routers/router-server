@@ -9,7 +9,7 @@ import (
 )
 
 func Get(modem string) (*ModemInfo, error) {
-	output, err := cli.ExecuteWrap("mmcli", ModemFlag(modem), JsonOutputFlag)
+	output, err := cli.Execute("mmcli", ModemFlag(modem), JsonOutputFlag)
 	if err != nil {
 		log.Error("Failed get modem info", "error", err, "modem", modem)
 		return nil, err
@@ -26,30 +26,30 @@ func Get(modem string) (*ModemInfo, error) {
 }
 
 func (m *ModemInfo) Disable() error {
-	_, err := cli.ExecuteWrap("mmcli", ModemFlag(m.DBusPath), "--disable")
+	_, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--disable")
 	return err
 }
 
 func (m *ModemInfo) Enable() error {
 	m.SetPowerStateOn() // ensures that it turned on
-	_, err := cli.ExecuteWrap("mmcli", ModemFlag(m.DBusPath), "--enable")
+	_, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--enable")
 	return err
 }
 
 func (m *ModemInfo) SetPowerStateOff() error {
-	log.Debugf("Set power state off for modem %s", m.DBusPath)
-	_, err := cli.ExecuteWrap("mmcli", ModemFlag(m.DBusPath), "--set-power-state-off")
+	log.Debug("Set power state off", "modem", m.DBusPath)
+	_, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--set-power-state-off")
 	return err
 }
 
 func (m *ModemInfo) SetPowerStateOn() error {
-	log.Debugf("Set power state on for modem %s", m.DBusPath)
-	_, err := cli.ExecuteWrap("mmcli", ModemFlag(m.DBusPath), "--set-power-state-on")
+	log.Debug("Set power state on", "modem", m.DBusPath)
+	_, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--set-power-state-on")
 	return err
 }
 
 func list() ([]string, error) {
-	output, err := cli.ExecuteWrap("mmcli", ListModemsFlag, JsonOutputFlag)
+	output, err := cli.Execute("mmcli", ListModemsFlag, JsonOutputFlag)
 	if err != nil {
 		log.Errorf("Failed get modems list: %s", err)
 		return nil, err
@@ -85,7 +85,7 @@ func (m *ModemInfo) GetBearer() (*BearerInfo, error) {
 	if len(m.Generic.Bearers) == 0 {
 		return nil, fmt.Errorf("no bearers")
 	}
-	_, err := cli.ExecuteWrap("mmcli", BearerFlag(m.Generic.Bearers[0]), JsonOutputFlag)
+	_, err := cli.Execute("mmcli", BearerFlag(m.Generic.Bearers[0]), JsonOutputFlag)
 	var info struct {
 		Bearer BearerInfo `json:"bearer"`
 	}
