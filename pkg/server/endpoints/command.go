@@ -10,7 +10,7 @@ import (
 
 type CommandRequest struct {
 	Command string         `json:"command" binding:"required"`
-	Args    map[string]any `json:"args" binding:"required"`
+	Args    map[string]any `json:"args"`
 }
 
 type CommandResponse struct {
