@@ -10,7 +10,7 @@ import (
 func List(_ models.JSONMap) (any, error) {
 	modems, err := mmcli.List()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to list modems: %s", err)
 	}
 	return models.JSONMap{"modems": modems}, nil
 }

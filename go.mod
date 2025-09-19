@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/mackerelio/go-osstat v0.2.6
 	github.com/spf13/viper v1.21.0
-	github.com/zarinit-routers/cli v0.0.0-20250910132533-d875d25d24b9
+	github.com/zarinit-routers/cli v0.2.0
 	github.com/zarinit-routers/commands v0.0.2
 )
 

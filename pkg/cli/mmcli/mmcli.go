@@ -76,7 +76,7 @@ func List() ([]*ModemInfo, error) {
 		info, err := Get(modem)
 		if err != nil {
 			log.Errorf("Failed get modem info: %s", err)
-			return nil, err
+			return nil, fmt.Errorf("failed get modem info: %s", err)
 		}
 		list = append(list, info)
 	}
