@@ -25,7 +25,7 @@ func init() {
 	// Read
 
 	if err := config.ReadInConfig(); err != nil {
-		if err, ok := err.(viper.ConfigFileNotFoundError); ok {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			log.Warn("There is no config file", "err", err)
 		} else {
 			log.Error("There was an error reading the config file", "err", err)

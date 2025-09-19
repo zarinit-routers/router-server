@@ -86,7 +86,11 @@ func establishConnection(conf *config.ConnectionConfig) error {
 		conn = connection
 	}
 	log.Info("Successfully connected to portal", "url", u)
-	defer conn.Close()
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Error("Failed to close connection", "err", err)
+		}
+	}()
 
 	for {
 		messageType, message, err := conn.ReadMessage()
@@ -97,7 +101,10 @@ func establishConnection(conf *config.ConnectionConfig) error {
 		log.Info("Message received", "message", string(message), "messageType", messageType)
 
 		var msg Request
-		json.Unmarshal(message, &msg)
+		if err := json.Unmarshal(message, &msg); err != nil {
+			log.Error("Failed to unmarshal message", "err", err)
+			break
+		}
 		if err := handleRequest(&msg); err != nil {
 			log.Error("Failed to handle request, sending internal error response", "err", err)
 		}
@@ -130,11 +137,6 @@ func handleRequest(r *Request) error {
 
 	log.Info("Request handled", "id", r.ID, "command", r.Command, "response", response.Data)
 	return sendResponse(response)
-}
-
-func getDummyId() string {
-	log.Warn("Using dummy UUID, do not use this in production. Even in development remove it ASAP")
-	return "00000000-0000-0000-0000-000000000000"
 }
 
 func GetHostID() string {

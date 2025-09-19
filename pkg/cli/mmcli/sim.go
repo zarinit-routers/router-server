@@ -8,7 +8,7 @@ import (
 )
 
 func GetSim(sim string) (*SimInfo, error) {
-	output, err := cli.ExecuteWrap("mmcli", SimFlag(sim), JsonOutputFlag)
+	output, err := cli.Execute("mmcli", SimFlag(sim), JsonOutputFlag)
 
 	if err != nil {
 		log.Errorf("Failed get sim: %s", err)

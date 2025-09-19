@@ -12,6 +12,6 @@ func PortForwarding() (string, error) {
 		log.Warnf("Can't get port forwarding logs: %s", err)
 		return "", err
 	}
-	output, err := cli.ExecuteWrap("iptables", "-t", "nat", "-L", "PREROUTING", "-n", "-v")
+	output, err := cli.Execute("iptables", "-t", "nat", "-L", "PREROUTING", "-n", "-v")
 	return string(output), err
 }

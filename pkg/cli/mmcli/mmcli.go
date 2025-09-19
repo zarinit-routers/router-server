@@ -31,7 +31,9 @@ func (m *ModemInfo) Disable() error {
 }
 
 func (m *ModemInfo) Enable() error {
-	m.SetPowerStateOn() // ensures that it turned on
+	if err := m.SetPowerStateOn(); err != nil {
+		return fmt.Errorf("failed to set power state on: %s", err)
+	} // ensures that it turned on
 	_, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--enable")
 	return err
 }

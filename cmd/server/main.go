@@ -25,7 +25,9 @@ func init() {
 	viper.SetConfigName("router-config")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("/etc/zarinit/")
-	viper.ReadInConfig()
+	if err := viper.ReadInConfig(); err != nil {
+		log.Error("Error while reading config file", "error", err)
+	}
 	viper.AutomaticEnv()
 
 	if viper.GetBool("debug") {

@@ -43,7 +43,7 @@ func Check() error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer closeDB(db)
 	return nil
 }
 func GetString(key string) string {
@@ -58,7 +58,7 @@ func getString(key string) string {
 	defer dbMutex.Unlock()
 
 	db := mustConnect()
-	defer db.Close()
+	defer closeDB(db)
 
 	txn := db.NewTransaction(false)
 	item, err := txn.Get([]byte(key))
@@ -81,11 +81,17 @@ func setString(key, value string) error {
 	dbMutex.Lock()
 	defer dbMutex.Unlock()
 	db := mustConnect()
-	defer db.Close()
+	defer closeDB(db)
 	txn := db.NewTransaction(true)
 	err := txn.Set([]byte(key), []byte(value))
 	if err != nil {
 		return err
 	}
 	return txn.Commit()
+}
+func closeDB(db *badger.DB) {
+	if err := db.Close(); err != nil {
+		log.Error("Error while closing key-value storage", "error", err)
+	}
+
 }

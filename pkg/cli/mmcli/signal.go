@@ -8,7 +8,7 @@ import (
 )
 
 func (m *ModemInfo) GetSignal() (*ModemSignal, error) {
-	output, err := cli.ExecuteWrap("mmcli", ModemFlag(m.DBusPath), "--signal-get", JsonOutputFlag)
+	output, err := cli.Execute("mmcli", ModemFlag(m.DBusPath), "--signal-get", JsonOutputFlag)
 	if err != nil {
 		log.Warn("Error occurred while getting signal, and was ignored", "error", err)
 		log.Warn("This error should not be ignored! Call Katy248 to fix it ASAP")
