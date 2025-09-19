@@ -25,7 +25,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 		token, err := jwt.Parse(authHeader, func(token *jwt.Token) (any, error) {
-			return getKey(), nil
+			return GetSecurityKey(), nil
 		})
 		if err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
@@ -37,7 +37,7 @@ func Auth() gin.HandlerFunc {
 	}
 }
 
-func getKey() []byte {
+func GetSecurityKey() []byte {
 	return []byte(viper.GetString("jwt-security-key"))
 }
 

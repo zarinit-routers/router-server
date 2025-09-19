@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/zarinit-routers/router-server/internal/user"
+	"github.com/zarinit-routers/router-server/pkg/server/middleware"
 )
 
 type LoginRequest struct {
@@ -46,5 +47,5 @@ func GenerateToken() (string, error) {
 			"iat": time.Now().Unix(),
 		})
 
-	return token.SignedString([]byte("auth.security-key"))
+	return token.SignedString(middleware.GetSecurityKey())
 }
