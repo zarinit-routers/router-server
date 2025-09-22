@@ -40,10 +40,10 @@ const (
 )
 
 type ConnectionConfig struct {
-	Passphrase     string
-	OrganizationId string
-	CloudHost      string
-	WSPort         int
+	Passphrase     string `json:"passphrase"`
+	OrganizationId string `json:"organizationId"`
+	CloudHost      string `json:"cloudHost"`
+	WSPort         int    `json:"wsPort"`
 }
 
 func (c *ConnectionConfig) GetWebsocketURL() string {
