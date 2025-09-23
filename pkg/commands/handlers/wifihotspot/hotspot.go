@@ -77,5 +77,10 @@ func GetStatus(_ models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed get connection %q: %s", conn.Name, err)
 	}
-	return models.JSONMap{"enabled": conn.IsActive()}, nil
+	wrConn, err := conn.AsWireless()
+	if err != nil {
+		return nil, fmt.Errorf("failed get wireless connection %q: %s", conn.Name, err)
+	}
+
+	return models.JSONMap{"enabled": wrConn.IsActive(), "ssid": wrConn.GetSSID(), "password": wrConn.GetPassword(), "band": wrConn.GetBand(), "channel": wrConn.GetChanel()}, nil
 }
