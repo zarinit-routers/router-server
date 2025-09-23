@@ -107,7 +107,7 @@ func SetSSID(args models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed set ssid: %s", err)
 	}
-	return models.JSONMap{"ssid": ssid}, nil
+	return models.JSONMap{"ssid": conn.GetSSID()}, nil
 }
 
 func SetSSIDVisibility(args models.JSONMap) (any, error) {
@@ -125,4 +125,38 @@ func SetSSIDVisibility(args models.JSONMap) (any, error) {
 		return nil, fmt.Errorf("failed set ssid visibility: %s", err)
 	}
 	return models.JSONMap{"hidden": hidden}, nil
+}
+
+func SetPassword(args models.JSONMap) (any, error) {
+	password, ok := args["password"].(string)
+	if !ok {
+		return nil, fmt.Errorf("password not specified")
+	}
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
+
+	err = conn.SetPassword(password)
+	if err != nil {
+		return nil, fmt.Errorf("failed set password: %s", err)
+	}
+	return models.JSONMap{"password": password}, nil
+}
+
+func SetChannel(args models.JSONMap) (any, error) {
+	channel, ok := args["channel"].(int)
+	if !ok {
+		return nil, fmt.Errorf("channel not specified")
+	}
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
+
+	err = conn.SetChannel(channel)
+	if err != nil {
+		return nil, fmt.Errorf("failed set channel: %s", err)
+	}
+	return models.JSONMap{"channel": channel}, nil
 }

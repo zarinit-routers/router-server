@@ -47,6 +47,8 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/wifi-hotspot/get-status":          wifihotspot.GetStatus,
 	"v1/wifi-hotspot/set-ssid":            wifihotspot.SetSSID,
 	"v1/wifi-hotspot/set-ssid-visibility": wifihotspot.SetSSIDVisibility,
+	"v1/wifi-hotspot/set-password":        wifihotspot.SetPassword,
+	"v1/wifi-hotspot/set-channel":         wifihotspot.SetChannel,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
