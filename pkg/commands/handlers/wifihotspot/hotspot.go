@@ -1,0 +1,70 @@
+package wifihotspot
+
+import (
+	"errors"
+	"fmt"
+	"net"
+
+	"github.com/spf13/viper"
+	"github.com/zarinit-routers/cli/nmcli"
+	"github.com/zarinit-routers/cli/systemctl"
+	"github.com/zarinit-routers/router-server/pkg/models"
+)
+
+func getConnectionName() (string, error) {
+	name := viper.GetString("wifi-hotspot.connection-name")
+	if name == "" {
+		return "", fmt.Errorf("wifi hotspot connection name not configured (configuration key is 'wifi-hotspot.connection-name')")
+	}
+	return name, nil
+}
+
+func Enable(args models.JSONMap) (any, error) {
+	ifName := viper.GetString("wifi-hotspot.interface")
+	if ifName == "" {
+		return nil, fmt.Errorf("wifi hotspot interface not configured (configuration key is 'wifi-hotspot.interface')")
+	}
+	connName, err := getConnectionName()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection name: %s", err)
+	}
+	conn, err := nmcli.CreateWirelessConnection(ifName, connName)
+	if err != nil {
+		return nil, fmt.Errorf("failed create wireless connection: %s", err)
+	}
+
+	err = errors.Join(
+		conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
+		conn.SetIP4Address("192.168.1.1/24"),
+		conn.SetDNSAddresses([]string{"8.8.8.8", "8.8.4.4"}),
+		conn.SetDHCPRange(net.IPv4(192, 168, 1, 100), net.IPv4(192, 168, 1, 200)),
+		conn.SetDHCPLeaseTime(3600),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed configure connection: %s", err)
+	}
+	if err := conn.Up(); err != nil {
+		return nil, fmt.Errorf("failed enable interface %q: %s", ifName, err)
+	}
+
+	err = errors.Join(systemctl.Enable("dhcpd"), systemctl.Enable("hostapd"))
+	if err != nil {
+		return nil, fmt.Errorf("failed enable services: %s", err)
+	}
+	return models.JSONMap{"enabled": true}, nil
+}
+
+func Disable(args models.JSONMap) (any, error) {
+	connName, err := getConnectionName()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection name: %s", err)
+	}
+	conn, err := nmcli.GetConnection(connName)
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection %q: %s", conn.Name, err)
+	}
+	if err := conn.Down(); err != nil {
+		return nil, fmt.Errorf("failed disable interface %q: %s", conn.Name, err)
+	}
+	return models.JSONMap{"enabled": false}, nil
+}

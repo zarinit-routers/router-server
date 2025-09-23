@@ -9,6 +9,8 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/ssh"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/system"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/wifihotspot"
+	hotspot "github.com/zarinit-routers/router-server/pkg/commands/handlers/wifihotspot"
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
@@ -39,6 +41,10 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/diagnostics/run-nslookup":   diagnostics.Nslookup,
 	"v1/diagnostics/run-traceroute": diagnostics.Traceroute,
 	"v1/diagnostics/run-ping":       diagnostics.Ping,
+	// wifi-hotspot
+	"v1/wifi-hotspot/enable":  hotspot.Enable,
+	"v1/wifi-hotspot/disable": wifihotspot.Disable,
+	// "v1/wifi-hotspot/get-status": wifihotspot.GetStatus,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
