@@ -19,7 +19,7 @@ func getConnectionName() (string, error) {
 	return name, nil
 }
 
-func Enable(args models.JSONMap) (any, error) {
+func Enable(_ models.JSONMap) (any, error) {
 	ifName := viper.GetString("wifi-hotspot.interface")
 	if ifName == "" {
 		return nil, fmt.Errorf("wifi hotspot interface not configured (configuration key is 'wifi-hotspot.interface')")
@@ -54,7 +54,7 @@ func Enable(args models.JSONMap) (any, error) {
 	return models.JSONMap{"enabled": true}, nil
 }
 
-func Disable(args models.JSONMap) (any, error) {
+func Disable(_ models.JSONMap) (any, error) {
 	connName, err := getConnectionName()
 	if err != nil {
 		return nil, fmt.Errorf("failed get connection name: %s", err)
@@ -67,4 +67,15 @@ func Disable(args models.JSONMap) (any, error) {
 		return nil, fmt.Errorf("failed disable interface %q: %s", conn.Name, err)
 	}
 	return models.JSONMap{"enabled": false}, nil
+}
+func GetStatus(_ models.JSONMap) (any, error) {
+	connName, err := getConnectionName()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection name: %s", err)
+	}
+	conn, err := nmcli.GetConnection(connName)
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection %q: %s", conn.Name, err)
+	}
+	return models.JSONMap{"enabled": conn.IsActive()}, nil
 }
