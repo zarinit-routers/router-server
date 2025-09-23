@@ -68,7 +68,8 @@ func Disable(_ models.JSONMap) (any, error) {
 	}
 	return models.JSONMap{"enabled": false}, nil
 }
-func GetStatus(_ models.JSONMap) (any, error) {
+
+func getConnection() (*nmcli.WirelessConnection, error) {
 	connName, err := getConnectionName()
 	if err != nil {
 		return nil, fmt.Errorf("failed get connection name: %s", err)
@@ -77,10 +78,51 @@ func GetStatus(_ models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed get connection %q: %s", conn.Name, err)
 	}
-	wrConn, err := conn.AsWireless()
+	wr, err := conn.AsWireless()
 	if err != nil {
 		return nil, fmt.Errorf("failed get wireless connection %q: %s", conn.Name, err)
 	}
+	return wr, nil
+}
+func GetStatus(_ models.JSONMap) (any, error) {
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
 
-	return models.JSONMap{"enabled": wrConn.IsActive(), "ssid": wrConn.GetSSID(), "password": wrConn.GetPassword(), "band": wrConn.GetBand(), "channel": wrConn.GetChanel()}, nil
+	return models.JSONMap{"enabled": conn.IsActive(), "ssid": conn.GetSSID(), "password": conn.GetPassword(), "band": conn.GetBand(), "channel": conn.GetChanel(), "hidden": conn.IsHidden()}, nil
+}
+
+func SetSSID(args models.JSONMap) (any, error) {
+	ssid, ok := args["ssid"].(string)
+	if !ok {
+		return nil, fmt.Errorf("ssid not specified")
+	}
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
+
+	err = conn.SetSSID(ssid)
+	if err != nil {
+		return nil, fmt.Errorf("failed set ssid: %s", err)
+	}
+	return models.JSONMap{"ssid": ssid}, nil
+}
+
+func SetSSIDVisibility(args models.JSONMap) (any, error) {
+	hidden, ok := args["hidden"].(bool)
+	if !ok {
+		return nil, fmt.Errorf("visibility not specified (key 'hidden' of type bool)")
+	}
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
+
+	err = conn.SetHidden(hidden)
+	if err != nil {
+		return nil, fmt.Errorf("failed set ssid visibility: %s", err)
+	}
+	return models.JSONMap{"hidden": hidden}, nil
 }

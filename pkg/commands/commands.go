@@ -42,9 +42,11 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/diagnostics/run-traceroute": diagnostics.Traceroute,
 	"v1/diagnostics/run-ping":       diagnostics.Ping,
 	// wifi-hotspot
-	"v1/wifi-hotspot/enable":     hotspot.Enable,
-	"v1/wifi-hotspot/disable":    wifihotspot.Disable,
-	"v1/wifi-hotspot/get-status": wifihotspot.GetStatus,
+	"v1/wifi-hotspot/enable":              hotspot.Enable,
+	"v1/wifi-hotspot/disable":             wifihotspot.Disable,
+	"v1/wifi-hotspot/get-status":          wifihotspot.GetStatus,
+	"v1/wifi-hotspot/set-ssid":            wifihotspot.SetSSID,
+	"v1/wifi-hotspot/set-ssid-visibility": wifihotspot.SetSSIDVisibility,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
