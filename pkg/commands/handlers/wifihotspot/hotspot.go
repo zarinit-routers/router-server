@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/spf13/viper"
+	"github.com/zarinit-routers/cli/iw"
 	"github.com/zarinit-routers/cli/nmcli"
 	"github.com/zarinit-routers/cli/systemctl"
 	"github.com/zarinit-routers/router-server/pkg/models"
@@ -159,4 +160,16 @@ func SetChannel(args models.JSONMap) (any, error) {
 		return nil, fmt.Errorf("failed set channel: %s", err)
 	}
 	return models.JSONMap{"channel": channel}, nil
+}
+func GetConnectedClients(_ models.JSONMap) (any, error) {
+	conn, err := getConnection()
+	if err != nil {
+		return nil, fmt.Errorf("failed get connection information: %s", err)
+	}
+
+	clients, err := iw.GetConnectedDevices(conn.Device)
+	if err != nil {
+		return nil, fmt.Errorf("failed get connected clients: %s", err)
+	}
+	return models.JSONMap{"clients": clients}, nil
 }
