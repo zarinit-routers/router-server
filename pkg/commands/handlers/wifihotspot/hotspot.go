@@ -20,6 +20,14 @@ func getConnectionName() (string, error) {
 	return name, nil
 }
 
+// TODO: Rework this function
+//
+// Deprecated: this function should be reworked.
+func getPassword() string {
+	viper.SetDefault("wifi-hotspot.password", "12345678")
+	return viper.GetString("wifi-hotspot.password")
+}
+
 func Enable(_ models.JSONMap) (any, error) {
 	ifName := viper.GetString("wifi-hotspot.interface")
 	if ifName == "" {
@@ -29,7 +37,7 @@ func Enable(_ models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed get connection name: %s", err)
 	}
-	conn, err := nmcli.CreateWirelessConnection(ifName, connName)
+	conn, err := nmcli.CreateWirelessConnection(ifName, connName, getPassword())
 	if err != nil {
 		return nil, fmt.Errorf("failed create wireless connection: %s", err)
 	}
