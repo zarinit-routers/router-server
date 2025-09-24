@@ -3,7 +3,6 @@ package wifihotspot
 import (
 	"errors"
 	"fmt"
-	"net"
 
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/cli/iw"
@@ -38,8 +37,8 @@ func Enable(_ models.JSONMap) (any, error) {
 		conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
 		conn.SetIP4Address("192.168.1.1/24"),
 		conn.SetDNSAddresses([]string{"8.8.8.8", "8.8.4.4"}),
-		conn.SetDHCPRange(net.IPv4(192, 168, 1, 100), net.IPv4(192, 168, 1, 200)),
-		conn.SetDHCPLeaseTime(3600),
+		// conn.SetDHCPRange(net.IPv4(192, 168, 1, 100), net.IPv4(192, 168, 1, 200)),
+		// conn.SetDHCPLeaseTime(3600),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("failed configure connection: %s", err)
