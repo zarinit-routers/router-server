@@ -153,6 +153,8 @@ github.com/zarinit-routers/cli v0.2.10 h1:v5nPi/hlLGAmHXq/toaJjOQav1MkWzH+qKtP/Q
 github.com/zarinit-routers/cli v0.2.10/go.mod h1:KVhnCkfqrbnYKlVeTpB8cs3fummyaCAmVQrdtXDoHxg=
 github.com/zarinit-routers/cli v0.2.11 h1:MRRC9Pxa4HiT/AArpO7Lu3Q/p/MLsDcOtsXpVInMeWU=
 github.com/zarinit-routers/cli v0.2.11/go.mod h1:KVhnCkfqrbnYKlVeTpB8cs3fummyaCAmVQrdtXDoHxg=
+github.com/zarinit-routers/cli v0.2.12 h1:7zagsFr76reJZmqtWvXbULu1TuL0SMZZj0bwH/4Qims=
+github.com/zarinit-routers/cli v0.2.12/go.mod h1:KVhnCkfqrbnYKlVeTpB8cs3fummyaCAmVQrdtXDoHxg=
 github.com/zarinit-routers/commands v0.0.2 h1:026PeoNgrTEQh2UX+vUC+BxzbN+9kHIPrWsjBkOE6fY=
 github.com/zarinit-routers/commands v0.0.2/go.mod h1:khV2ZIiVRrkgjFX5ns2Q8Mw4H+xmq5QYdTr2ZWKCeyU=
 go.opentelemetry.io/auto/sdk v1.1.0 h1:cH53jehLUN6UFLY71z+NDOiNJqDdPRaXzTel0sJySYA=
