@@ -77,11 +77,11 @@ func getConnection() (*nmcli.WirelessConnection, error) {
 	}
 	conn, err := nmcli.GetConnection(connName)
 	if err != nil {
-		return nil, fmt.Errorf("failed get connection %q: %s", conn.Name, err)
+		return nil, fmt.Errorf("failed get connection %q: %s", connName, err)
 	}
 	wr, err := conn.AsWireless()
 	if err != nil {
-		return nil, fmt.Errorf("failed get wireless connection %q: %s", conn.Name, err)
+		return nil, fmt.Errorf("failed get wireless connection %q: %s", connName, err)
 	}
 	return wr, nil
 }
