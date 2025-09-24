@@ -37,9 +37,9 @@ func Enable(_ models.JSONMap) (any, error) {
 	ipAddr := "192.168.1.1/24"
 	log.Warn("Setting IP address to constant, remove this behavior ASAP", "ip", ipAddr)
 	err = errors.Join(
-		// conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
+		conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
 		conn.SetIP4Address(ipAddr),
-		conn.SetDNSAddresses([]string{"8.8.8.8", "8.8.4.4"}),
+		// conn.SetDNSAddresses([]string{"8.8.8.8", "8.8.4.4"}),
 		// conn.SetDHCPRange(net.IPv4(192, 168, 1, 100), net.IPv4(192, 168, 1, 200)),
 		// conn.SetDHCPLeaseTime(3600),
 	)
