@@ -9,7 +9,6 @@ import (
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/ssh"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/system"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/timezone"
-	"github.com/zarinit-routers/router-server/pkg/commands/handlers/wifihotspot"
 	hotspot "github.com/zarinit-routers/router-server/pkg/commands/handlers/wifihotspot"
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
@@ -43,13 +42,13 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/diagnostics/run-ping":       diagnostics.Ping,
 	// wifi-hotspot
 	"v1/wifi-hotspot/enable":                hotspot.Enable,
-	"v1/wifi-hotspot/disable":               wifihotspot.Disable,
-	"v1/wifi-hotspot/get-status":            wifihotspot.GetStatus,
-	"v1/wifi-hotspot/set-ssid":              wifihotspot.SetSSID,
-	"v1/wifi-hotspot/set-ssid-visibility":   wifihotspot.SetSSIDVisibility,
-	"v1/wifi-hotspot/set-password":          wifihotspot.SetPassword,
-	"v1/wifi-hotspot/set-channel":           wifihotspot.SetChannel,
-	"v1/wifi-hotspot/get-connected-clients": wifihotspot.GetConnectedClients,
+	"v1/wifi-hotspot/disable":               hotspot.Disable,
+	"v1/wifi-hotspot/get-status":            hotspot.GetStatus,
+	"v1/wifi-hotspot/set-ssid":              hotspot.SetSSID,
+	"v1/wifi-hotspot/set-ssid-visibility":   hotspot.SetSSIDVisibility,
+	"v1/wifi-hotspot/set-password":          hotspot.SetPassword,
+	"v1/wifi-hotspot/set-channel":           hotspot.SetChannel,
+	"v1/wifi-hotspot/get-connected-clients": hotspot.GetConnectedClients,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
