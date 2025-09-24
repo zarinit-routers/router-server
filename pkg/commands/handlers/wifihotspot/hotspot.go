@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/cli/iw"
 	"github.com/zarinit-routers/cli/nmcli"
@@ -33,9 +34,11 @@ func Enable(_ models.JSONMap) (any, error) {
 		return nil, fmt.Errorf("failed create wireless connection: %s", err)
 	}
 
+	ipAddr := "192.168.1.1/24"
+	log.Warn("Setting IP address to constant, remove this behavior ASAP", "ip", ipAddr)
 	err = errors.Join(
-		conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
-		conn.SetIP4Address("192.168.1.1/24"),
+		// conn.SetIP4Method(nmcli.ConnectionIP4MethodShared),
+		conn.SetIP4Address(ipAddr),
 		conn.SetDNSAddresses([]string{"8.8.8.8", "8.8.4.4"}),
 		// conn.SetDHCPRange(net.IPv4(192, 168, 1, 100), net.IPv4(192, 168, 1, 200)),
 		// conn.SetDHCPLeaseTime(3600),
