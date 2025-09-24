@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/viper"
 	"github.com/zarinit-routers/cli/iw"
 	"github.com/zarinit-routers/cli/nmcli"
-	"github.com/zarinit-routers/cli/systemctl"
 	"github.com/zarinit-routers/router-server/pkg/models"
 )
 
@@ -27,8 +26,7 @@ func getPassword() string {
 	viper.SetDefault("wifi-hotspot.password", "12345678")
 	return viper.GetString("wifi-hotspot.password")
 }
-
-func Enable(_ models.JSONMap) (any, error) {
+func createConnection() (*nmcli.WirelessConnection, error) {
 	ifName := viper.GetString("wifi-hotspot.interface")
 	if ifName == "" {
 		return nil, fmt.Errorf("wifi hotspot interface not configured (configuration key is 'wifi-hotspot.interface')")
@@ -54,15 +52,31 @@ func Enable(_ models.JSONMap) (any, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed configure connection: %s", err)
 	}
-	if err := conn.Up(); err != nil {
-		return nil, fmt.Errorf("failed enable interface %q: %s", ifName, err)
+	return conn, nil
+}
+
+func Enable(_ models.JSONMap) (any, error) {
+
+	var conn *nmcli.WirelessConnection
+	// conn, err := getConnection()
+	if c, err := getConnection(); err == nil && c != nil {
+		conn = c
+	} else {
+		conn, err = createConnection()
+		if err != nil {
+			return nil, fmt.Errorf("failed create connection: %s", err)
+		}
 	}
 
-	err = errors.Join(systemctl.Enable("dhcpd"), systemctl.Enable("hostapd"))
-	if err != nil {
-		return nil, fmt.Errorf("failed enable services: %s", err)
+	if err := conn.Up(); err != nil {
+		return nil, fmt.Errorf("failed enable connection %q: %s", conn.Name, err)
 	}
 	return models.JSONMap{"enabled": true}, nil
+
+	// err = errors.Join(systemctl.Enable("dhcpd"), systemctl.Enable("hostapd"))
+	// if err != nil {
+	// 	return nil, fmt.Errorf("failed enable services: %s", err)
+	// }
 }
 
 func Disable(_ models.JSONMap) (any, error) {
