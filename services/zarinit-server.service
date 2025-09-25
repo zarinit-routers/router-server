@@ -1,0 +1,12 @@
+[Unit]
+Description=Zarinit router server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/zarinit/zarinit-server
+Restart=always
+PIDFile=/opt/zarinit/zarinit-server.pid
+
+[Install]
+WantedBy=default.target

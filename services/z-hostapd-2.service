@@ -1,0 +1,12 @@
+[Unit]
+Description=Hostapd IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/run/z-hostapd-2.pid
+EnvironmentFile=/etc/sysconfig/hostapd
+ExecStart=/usr/sbin/hostapd /etc/hostapd/z-hostapd-2.conf -P /run/z-hostapd-2.pid -B $OTHER_ARGS
+
+[Install]
+WantedBy=multi-user.target
