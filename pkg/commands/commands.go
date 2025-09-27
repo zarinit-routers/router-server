@@ -2,6 +2,7 @@ package commands
 
 import (
 	c "github.com/zarinit-routers/commands"
+	"github.com/zarinit-routers/router-server/pkg/commands/handlers/dhcp"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/diagnostics"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/journals"
 	"github.com/zarinit-routers/router-server/pkg/commands/handlers/modems"
@@ -49,6 +50,10 @@ var implementedCommands = map[string]CommandHandler{
 	"v1/wifi-hotspot/set-password":          hotspot.SetPassword,
 	"v1/wifi-hotspot/set-channel":           hotspot.SetChannel,
 	"v1/wifi-hotspot/get-connected-clients": hotspot.GetConnectedClients,
+	// dhcp
+	"v1/dhcp/enable":     dhcp.Enable,
+	"v1/dhcp/disable":    dhcp.Enable,
+	"v1/dhcp/get-status": dhcp.GetStatus,
 }
 
 func CheckCommand(command string) (CommandHandler, error) {
